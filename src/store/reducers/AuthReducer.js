@@ -1,7 +1,8 @@
-const intState = {
-    authResponse: null
+const initState = {
+    authResponse: null,
+    message: null
 }
-const AuthReducer = (state=intState, action) => {
+const AuthReducer = (state=initState, action) => {
    switch(action.type){
        case 'SHORT_PASSWORD':
            console.log(action);
@@ -19,13 +20,26 @@ const AuthReducer = (state=intState, action) => {
             console.log(action);
            return {
                ...state,
-               authResponse:action.error.message
+               authResponse:action.res.message,
            }
         case 'CODE_ERROR':
             console.log(action);
            return {
                ...state,
                authResponse:'Please try again letter'
+           }
+        case 'LOGIN_SUCCESS':
+            console.log(action);
+           return {
+               ...state,
+               authResponse:'Reacdirecting you a Dashboard...'
+           }
+        case 'LOGIN_ERROR':
+            console.log(action);
+           return {
+               ...state,
+               authResponse:"Creadintaial not match",
+
            }
         default:
            return state

@@ -1,4 +1,5 @@
 import { SignupService } from '../services/AuthService';
+import { LoginUser } from '../services/AuthService';
 
 
 export const signUp = (credentials ) => {
@@ -10,7 +11,7 @@ export const signUp = (credentials ) => {
     
         SignupService(credentials).then((res) => {
             console.log(res);
-            if(res.token !== null){
+            if(res.success==true && res.token !== null){
                 localStorage.setItem('user','Bearer '+res.token);
                 dispatch({type: 'SIGNUP_SUCCESS'});
             }else{
@@ -23,4 +24,30 @@ export const signUp = (credentials ) => {
         )
     }
     
+}
+
+
+export const loginuser = (credentials,history) => {
+    return (dispatch) => {
+        if(credentials.password.length < 6){
+            return dispatch({type:'SHORT_PASSWORD'});
+        }
+
+        LoginUser(credentials,history).then((res) => {
+            console.log(res);
+            if(res.success==true){
+                localStorage.setItem('users','Bearer '+res.token);
+                dispatch({type:'LOGIN_SUCCESS'})
+                setTimeout(() => {
+                    history.push("/dashboard");     
+                }, 3000);
+            }else{
+                dispatch({type:'LOGIN_ERROR'},res);
+            }
+        },
+            error=>{
+                dispatch({type:'CODE_ERROR',error});
+            }
+        )
+    }
 }
